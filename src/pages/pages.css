@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@reference "tailwindcss";
+
+.input {
+  @apply border rounded-md px-3 py-2 bg-white/90 dark:bg-black/20;
+}
+
+.input.invalid {
+  @apply border-red-500;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(0,0,0,0.1);
+  border-left-color: rgba(0,0,0,0.7);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
