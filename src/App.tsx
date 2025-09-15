@@ -3,7 +3,7 @@ import './App.css'
 import StartPage from './pages/StartPage'
 import SurveyPage from './pages/SurveyPage'
 import ResultPage from './pages/ResultPage'
-import { SurveyPayload, ModelResponse } from './types'
+import type { SurveyPayload, ModelResponse } from './types'
 import { postSurvey } from './api'
 
 type Step = 'start' | 'survey' | 'result'
@@ -14,7 +14,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | undefined>()
   const [result, setResult] = useState<ModelResponse | null>(null)
-  const [abortController, setAbortController] = useState<AbortController | null>(null)
+  const [, setAbortController] = useState<AbortController | null>(null)
 
   const start = useCallback(() => setStep('survey'), [])
 

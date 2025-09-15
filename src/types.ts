@@ -1,49 +1,53 @@
 // 타입 정의 및 설문 옵션
 
-export enum HouseholdIncome {
-  NoAnswer = 0,
-  Under3M = 1,
-  From3To5M = 2,
-  From5To7M = 3,
-  Over7M = 4,
-}
+export const HouseholdIncome = {
+  NoAnswer: 0,
+  Under3M: 1,
+  From3To5M: 2,
+  From5To7M: 3,
+  Over7M: 4,
+} as const
+export type HouseholdIncome = typeof HouseholdIncome[keyof typeof HouseholdIncome]
 
-export enum LeisurePurpose {
-  MindPeaceRest = 1,
-  KillTime = 2,
-  FamilyFriends = 3,
-  SelfSatisfaction = 4,
-  SelfDevelopment = 5,
-  StressRelief = 6,
-  HealthCare = 7,
-  SocialRelationship = 8,
-  Etc = 9,
-}
+export const LeisurePurpose = {
+  MindPeaceRest: 1,
+  KillTime: 2,
+  FamilyFriends: 3,
+  SelfSatisfaction: 4,
+  SelfDevelopment: 5,
+  StressRelief: 6,
+  HealthCare: 7,
+  SocialRelationship: 8,
+  Etc: 9,
+} as const
+export type LeisurePurpose = typeof LeisurePurpose[keyof typeof LeisurePurpose]
 
-export enum LeisurePurpose2 {
-  None = 0,
-  MindPeaceRest = 1,
-  KillTime = 2,
-  FamilyFriends = 3,
-  SelfSatisfaction = 4,
-  SelfDevelopment = 5,
-  StressRelief = 6,
-  HealthCare = 7,
-  SocialRelationship = 8,
-  Etc = 9,
-}
+export const LeisurePurpose2 = {
+  None: 0,
+  MindPeaceRest: 1,
+  KillTime: 2,
+  FamilyFriends: 3,
+  SelfSatisfaction: 4,
+  SelfDevelopment: 5,
+  StressRelief: 6,
+  HealthCare: 7,
+  SocialRelationship: 8,
+  Etc: 9,
+} as const
+export type LeisurePurpose2 = typeof LeisurePurpose2[keyof typeof LeisurePurpose2]
 
-export enum LeisureActivity {
-  None = 0,
-  MediaContent = 1,
-  Sports = 2,
-  TravelOutdoor = 3,
-  CultureArt = 4,
-  SelfDevelopment = 5,
-  SocialFamily = 6,
-  DailyRest = 7,
-  Etc = 8,
-}
+export const LeisureActivity = {
+  None: 0,
+  MediaContent: 1,
+  Sports: 2,
+  TravelOutdoor: 3,
+  CultureArt: 4,
+  SelfDevelopment: 5,
+  SocialFamily: 6,
+  DailyRest: 7,
+  Etc: 8,
+} as const
+export type LeisureActivity = typeof LeisureActivity[keyof typeof LeisureActivity]
 
 export type SurveyPayload = {
   householdIncome: HouseholdIncome

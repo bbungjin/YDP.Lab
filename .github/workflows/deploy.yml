@@ -29,7 +29,10 @@ jobs:
         run: npm ci
       - name: Build
         env:
-          VITE_USE_MOCK: "true"
+          VITE_USE_MOCK: "false"
+          # 저장소 Variables에서 설정하세요: Settings → Secrets and variables → Variables
+          # vars 우선, 없으면 secrets, 둘 다 없으면 실패하지 않도록 기본값 예시 사용
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL || secrets.VITE_API_BASE_URL || 'https://your-api.example.com' }}
           VITE_BASE: "/${{ github.event.repository.name }}/"
         run: npm run build
       - name: Create 404.html for SPA routing

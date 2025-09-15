@@ -1,4 +1,4 @@
-import { ModelResponse, SurveyPayload } from './types'
+import type { ModelResponse, SurveyPayload } from './types'
 
 export function buildMockResponse(payload: SurveyPayload): ModelResponse {
   const totalHours = payload.weekdayAvgLeisureTime * 5 + payload.weekendAvgLeisureTime * 2

@@ -1,5 +1,5 @@
 import './pages.css'
-import { ModelResponse } from '../types'
+import { type ModelResponse } from '../types'
 
 type Props = {
   result: ModelResponse | null
@@ -50,18 +50,18 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
         </section>
         <section>
           <h3 className="font-semibold mb-1">분석 요약</h3>
-          <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
+          {/* <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
             <li>목적: {result.analyze.purpose}</li>
             <li>시간 패턴: {result.analyze.timePattern}</li>
             <li>
               흥미 요소:
               <ul className="list-disc list-inside pl-4">
-                {result.analyze.interesting.map((it, idx) => (
+                {result.analyze.interesting.map((it: string, idx: number) => (
                   <li key={idx}>{it}</li>
                 ))}
               </ul>
             </li>
-          </ul>
+          </ul> */}
         </section>
       </div>
 

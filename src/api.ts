@@ -1,4 +1,4 @@
-import { ModelResponse, SurveyPayload } from './types'
+import type { ModelResponse, SurveyPayload } from './types'
 import { buildMockResponse } from './mocks'
 
 const VITE_API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL
