@@ -1,5 +1,7 @@
 import './pages.css'
-
+import AnimatedText from '../components/mainText'
+import dol1 from '../assets/dolphine-1.png'
+import dol2 from '../assets/dolphine-2.png'
 type Props = {
   onStart: () => void
 }
@@ -16,6 +18,9 @@ export default function StartPage({ onStart }: Props) {
       <button className="w-full py-3 rounded-md bg-black text-white dark:bg-white dark:text-black" onClick={onStart}>
         테스트 시작하기
       </button>
+      <AnimatedText />
+      <img alt="logo" src={dol1} />
+      <img alt="logo" src={dol2} />
     </div>
   )
 }
