@@ -12,7 +12,7 @@ export async function postSurvey(payload: SurveyPayload, signal?: AbortSignal): 
     await new Promise((r) => setTimeout(r, 600))
     return buildMockResponse(payload)
   }
-  const res = await fetch(`${API_BASE_URL}/animal`, {
+  const res = await fetch(`${API_BASE_URL}/questions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
