@@ -43,7 +43,7 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
         <img
           src={result.animalImageUrl}
           alt={result.animalName}
-          className="w-full h-48 object-cover rounded-md mb-4"
+          className="w-full h-64 object-cover rounded-md mb-4"
         />
       )}
       <h2 className="text-2xl font-bold mb-1">{result.animalName}</h2>
