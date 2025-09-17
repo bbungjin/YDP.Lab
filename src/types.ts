@@ -77,7 +77,9 @@ export type ModelResponse = {
   animalType: string
   description: string
   animalDescription: string
-  analyze: ModelAnalyze
+  clusterDescription?: string
+  interesting?: string[]
+  // analyze: ModelAnalyze
 }
 
 export const householdIncomeOptions: { value: HouseholdIncome; label: string }[] = [

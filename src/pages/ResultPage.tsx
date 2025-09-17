@@ -50,18 +50,19 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
         </section>
         <section>
           <h3 className="font-semibold mb-1">분석 요약</h3>
-          {/* <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
-            <li>목적: {result.analyze.purpose}</li>
-            <li>시간 패턴: {result.analyze.timePattern}</li>
-            <li>
-              흥미 요소:
-              <ul className="list-disc list-inside pl-4">
-                {result.analyze.interesting.map((it: string, idx: number) => (
+          {result.clusterDescription && (
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{result.clusterDescription}</p>
+          )}
+          {Array.isArray(result.interesting) && result.interesting.length > 0 && (
+            <div>
+              <h4 className="text-sm font-medium mb-1">흥미 요소</h4>
+              <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
+                {result.interesting.map((it, idx) => (
                   <li key={idx}>{it}</li>
                 ))}
               </ul>
-            </li>
-          </ul> */}
+            </div>
+          )}
         </section>
       </div>
 

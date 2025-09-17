@@ -1,7 +1,7 @@
 import type { ModelResponse, SurveyPayload } from './types'
+import { leisureActivityOptions, LeisureActivity } from './types'
 
 export function buildMockResponse(payload: SurveyPayload): ModelResponse {
-  const totalHours = payload.weekdayAvgLeisureTime * 5 + payload.weekendAvgLeisureTime * 2
   const dominant = Math.max(
     payload.restRecreationRate,
     payload.hobbyRate,
@@ -31,18 +31,37 @@ export function buildMockResponse(payload: SurveyPayload): ModelResponse {
     animalDesc = '너구리는 손재주가 좋고 적응력이 높습니다.'
   }
 
-  const analyze = {
-    purpose: `1순위 목적 코드 ${payload.leisurePurpose}, 2순위 ${payload.leisurePurpose2}`,
-    timePattern: totalHours > 30 ? '활동적' : '온건',
-    interesting: ['영화보기', '산책', '가벼운 운동'],
-  }
+  // 상위 취향 활동을 기반으로 클러스터 설명 및 흥미 요소 구성
+  const activityValues: number[] = [
+    payload.leisureActivity1,
+    payload.leisureActivity2,
+    payload.leisureActivity3,
+    payload.leisureActivity4,
+    payload.leisureActivity5,
+  ]
+
+  const firstPreferred = activityValues.find((v) => v !== LeisureActivity.None) ?? LeisureActivity.None
+  const firstPreferredLabel =
+    leisureActivityOptions.find((o) => o.value === firstPreferred)?.label || '선호 활동'
+
+  const interesting = activityValues
+    .filter((v) => v !== LeisureActivity.None)
+    .map((v) => leisureActivityOptions.find((o) => o.value === v)?.label || '활동')
+    .filter((v, i, arr) => v && arr.indexOf(v) === i)
+    .slice(0, 3)
+
+  const clusterDescription = firstPreferred !== LeisureActivity.None
+    ? `당신의 유형은 다른 유형보다 ${firstPreferredLabel}을 좋아합니다.`
+    : '당신의 유형은 다양한 활동을 균형 있게 선호합니다.'
 
   return {
     animalName,
     animalType,
     description: desc,
     animalDescription: animalDesc,
-    analyze,
+    clusterDescription,
+    interesting,
+    // analyze,
   }
 }
 
