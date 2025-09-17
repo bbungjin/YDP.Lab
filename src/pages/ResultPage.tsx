@@ -39,6 +39,13 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
 
   return (
     <div className="p-6 max-w-md mx-auto text-left">
+      {result.animalImageUrl && (
+        <img
+          src={result.animalImageUrl}
+          alt={result.animalName}
+          className="w-full h-48 object-cover rounded-md mb-4"
+        />
+      )}
       <h2 className="text-2xl font-bold mb-1">{result.animalName}</h2>
       <p className="text-gray-600 mb-4">{result.animalType}</p>
       <p className="mb-6">{result.animalDescription}</p>

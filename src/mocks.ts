@@ -1,5 +1,7 @@
 import type { ModelResponse, SurveyPayload } from './types'
 import { leisureActivityOptions, LeisureActivity } from './types'
+import dolphin1Url from './assets/dolphine-1.png'
+import dolphin2Url from './assets/dolphine-2.png'
 
 export function buildMockResponse(payload: SurveyPayload): ModelResponse {
   const dominant = Math.max(
@@ -13,22 +15,26 @@ export function buildMockResponse(payload: SurveyPayload): ModelResponse {
   let animalType = '야옹이는 독립적'
   let desc = '이 유형은 개인의 즐거움보다 관계 형성과 유지를 여가의 핵심 동력으로 삼습니다.'
   let animalDesc = '야옹이는 독립적인 동물입니다~어쩌구'
+  let animalImageUrl: string | undefined
 
   if (dominant === payload.socialRelationshipRate) {
     animalName = '강아지'
     animalType = '강아지는 사회적'
     desc = '사람들과 함께하는 활동에서 에너지를 얻고 즐거움을 느낍니다.'
     animalDesc = '강아지는 교류를 사랑하고 팀 활동에 강점이 있어요.'
+    animalImageUrl = dolphin1Url
   } else if (dominant === payload.selfImprovementRate) {
     animalName = '부엉이'
     animalType = '부엉이는 탐구적'
     desc = '지식·기술을 확장하는 행위를 여가의 중요한 목표로 봅니다.'
     animalDesc = '부엉이는 호기심이 많고 집중력이 좋아요.'
+    animalImageUrl = dolphin2Url
   } else if (dominant === payload.hobbyRate) {
     animalName = '너구리'
     animalType = '너구리는 다재다능'
     desc = '취미 중심으로 다양한 활동을 시도하고 성취를 즐깁니다.'
     animalDesc = '너구리는 손재주가 좋고 적응력이 높습니다.'
+    animalImageUrl = '/vite.svg'
   }
 
   // 상위 취향 활동을 기반으로 클러스터 설명 및 흥미 요소 구성
@@ -61,6 +67,7 @@ export function buildMockResponse(payload: SurveyPayload): ModelResponse {
     animalDescription: animalDesc,
     clusterDescription,
     interesting,
+    animalImageUrl,
     // analyze,
   }
 }

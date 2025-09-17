@@ -79,6 +79,7 @@ export type ModelResponse = {
   animalDescription: string
   clusterDescription?: string
   interesting?: string[]
+  animalImageUrl?: string
   // analyze: ModelAnalyze
 }
 
