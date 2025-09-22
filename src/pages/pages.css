@@ -1,6 +1,21 @@
 @import "tailwindcss";
 @reference "tailwindcss";
 
+/* Custom Font: MemomentKkukkkuk */
+@font-face {
+  font-family: 'MemomentKkukkkuk';
+  src: url('../assets/memomentKkukkkuk.otf') format('opentype'),
+       url('../assets/memomentKkukkkuk.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply globally */
+body {
+  font-family: 'MemomentKkukkkuk', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
 .input {
   @apply border rounded-md px-3 py-2 bg-white/90 dark:bg-black/20;
 }
@@ -20,6 +35,19 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* number input 스핀 버튼 제거 (Chrome, Safari, Edge) */
+.input[type=number]::-webkit-outer-spin-button,
+.input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* number input 스핀 버튼 제거 (Firefox) */
+.input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 

@@ -1,6 +1,8 @@
-import { useMemo, useRef, useState } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import './pages.css'
+import dol1 from '../assets/dolphine-1.png'
+import dol2 from '../assets/dolphine-2.png'
 import {
   householdIncomeOptions,
   leisurePurpose2Options,
@@ -127,6 +129,105 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
     }
   }
 
+  // number 입력 포커스 시 기본값 0을 빈 문자열로 보여주기 위한 포커스 상태
+  const [weekdayFocus, setWeekdayFocus] = useState<boolean>(false)
+  const [weekendFocus, setWeekendFocus] = useState<boolean>(false)
+  const [restRateFocus, setRestRateFocus] = useState<boolean>(false)
+  const [hobbyRateFocus, setHobbyRateFocus] = useState<boolean>(false)
+  const [selfImproveRateFocus, setSelfImproveRateFocus] = useState<boolean>(false)
+  const [socialRateFocus, setSocialRateFocus] = useState<boolean>(false)
+
+  // 진행 바 관련 refs 및 진행률 계산
+  const progressContainerRef = useRef<HTMLDivElement | null>(null)
+  const progressFillRef = useRef<HTMLDivElement | null>(null)
+  const progressDolphinRef = useRef<HTMLDivElement | null>(null)
+  const progressSwapTlRef = useRef<gsap.core.Timeline | null>(null)
+  const progressTlRef = useRef<gsap.core.Animation | null>(null)
+  const totalSteps = 10
+  const progressAnimDuration = 1.2
+  const progressPercent = useMemo(() => {
+    const pct = (stepIndex / (totalSteps - 1)) * 100
+    return Math.max(0, Math.min(100, Math.round(pct)))
+  }, [stepIndex])
+
+  // 돌고래 교체/바운스 애니메이션 (한 번 설정)
+  useLayoutEffect(() => {
+    const el = progressDolphinRef.current
+    if (!el) return
+    const imgs = el.querySelectorAll('img')
+    if (imgs.length < 2) return
+    const img1 = imgs[0] as HTMLImageElement
+    const img2 = imgs[1] as HTMLImageElement
+    gsap.set(img1, { opacity: 1 })
+    gsap.set(img2, { opacity: 0 })
+    const bob = gsap.to(el, { y: -10, rotation: 3, duration: 1.6, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+    const swap = gsap.timeline({ repeat: -1 })
+      .to(img1, { opacity: 0, duration: 0.2, ease: 'sine.inOut' })
+      .to(img2, { opacity: 1, duration: 0.2, ease: 'sine.inOut' }, '<')
+      .to({}, { duration: 0.4 })
+      .to(img1, { opacity: 1, duration: 0.2, ease: 'sine.inOut' })
+      .to(img2, { opacity: 0, duration: 0.2, ease: 'sine.inOut' }, '<')
+      .to({}, { duration: 0.4 })
+    progressSwapTlRef.current = swap
+    return () => {
+      bob.kill()
+      swap.kill()
+    }
+  }, [])
+
+  // 진행률 변화 시 막대 채우기/돌고래 이동 애니메이션
+  useLayoutEffect(() => {
+    const fill = progressFillRef.current
+    const marker = progressDolphinRef.current
+    const container = progressContainerRef.current
+    if (!fill || !marker || !container) return
+    // 기존 진행 타임라인 중단 후 새로 생성
+    progressTlRef.current && progressTlRef.current.kill()
+    // 시작 퍼센트를 현재 width 기준으로 계산
+    const containerWidth = container.getBoundingClientRect().width
+    const startPercent = containerWidth > 0 ? (fill.getBoundingClientRect().width / containerWidth) * 100 : 0
+    const proxy = { p: startPercent }
+    const tl = gsap.to(proxy, {
+      p: progressPercent,
+      duration: progressAnimDuration,
+      ease: 'power3.inOut',
+      overwrite: 'auto',
+      onUpdate: () => {
+        const c = progressContainerRef.current
+        const f = progressFillRef.current
+        const m = progressDolphinRef.current
+        if (!c || !f || !m) return
+        f.style.width = `${proxy.p}%`
+        const w = c.getBoundingClientRect().width
+        const xNow = (w * proxy.p) / 100
+        gsap.set(m, { x: xNow - 12 })
+      },
+    })
+    progressTlRef.current = tl
+    // 진행 중에는 돌고래 프레임 전환을 더 빠르게
+    if (progressSwapTlRef.current) {
+      progressSwapTlRef.current.timeScale(3)
+      gsap.delayedCall(progressAnimDuration, () => {
+        progressSwapTlRef.current && progressSwapTlRef.current.timeScale(1)
+      })
+    }
+  }, [progressPercent])
+
+  // 리사이즈 시 위치 보정
+  useLayoutEffect(() => {
+    const handler = () => {
+      const marker = progressDolphinRef.current
+      const container = progressContainerRef.current
+      if (!marker || !container) return
+      const rect = container.getBoundingClientRect()
+      const x = (rect.width * progressPercent) / 100
+      gsap.set(marker, { x: x - 12 })
+    }
+    window.addEventListener('resize', handler)
+    handler()
+    return () => window.removeEventListener('resize', handler)
+  }, [progressPercent])
+
   function renderTwoColumnButtons(
     options: { value: number; label: string }[],
     selectedValue: number | null,
@@ -155,7 +256,7 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
     <div className="space-y-4">
       {stepIndex === 0 && (
         <div ref={incomeAnimRef} className="relative">
-          <label className="block text-sm mb-1">당신의 월 가구 소득 정도를 선택해주세요.</label>
+          <label className="block text-2xl mb-1">당신의 월 가구 소득 정도를 선택해주세요.</label>
           <div className="grid grid-cols-2 gap-2">
             {householdIncomeOptions.map((opt) => {
               const isActive = form.householdIncome === opt.value
@@ -186,7 +287,7 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
 
       {stepIndex === 1 && (
         <div>
-          <label className="block text-sm mb-1">여가시간의 사용 목적 1순위는 무엇일까요?</label>
+          <label className="block text-2xl mb-1">여가시간의 사용 목적 1순위는 무엇일까요?</label>
           {renderTwoColumnButtons(
             leisurePurposeOptions,
             form.leisurePurpose,
@@ -197,7 +298,7 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
 
       {stepIndex === 2 && (
         <div>
-          <label className="block text-sm mb-1">여가시간의 사용 목적 2순위는 무엇일까요?</label>
+          <label className="block text-2xl mb-1">여가시간의 사용 목적 2순위는 무엇일까요?</label>
           {renderTwoColumnButtons(
             leisurePurpose2Options,
             form.leisurePurpose2,
@@ -209,27 +310,31 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
       {stepIndex === 3 && (
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm mb-1">일평균 여가시간을 적어주세요. (평일)</label>
+            <label className="block text-2xl mb-1">일평균 여가시간을 적어주세요. (평일)</label>
             <input
               className="w-full input"
               type="number"
               min={0}
               max={24}
               placeholder="0 ~ 24"
-              value={form.weekdayAvgLeisureTime}
+              value={weekdayFocus && form.weekdayAvgLeisureTime === 0 ? '' : form.weekdayAvgLeisureTime}
               onChange={(e) => handleNumber('weekdayAvgLeisureTime', e.target.value)}
+              onFocus={() => setWeekdayFocus(true)}
+              onBlur={() => setWeekdayFocus(false)}
             />
           </div>
           <div>
-            <label className="block text-sm mb-1">일평균 여가시간을 적어주세요. (주말)</label>
+            <label className="block text-2xl mb-1">일평균 여가시간을 적어주세요. (주말)</label>
             <input
               className="w-full input"
               type="number"
               min={0}
               max={24}
               placeholder="0 ~ 24"
-              value={form.weekendAvgLeisureTime}
+              value={weekendFocus && form.weekendAvgLeisureTime === 0 ? '' : form.weekendAvgLeisureTime}
               onChange={(e) => handleNumber('weekendAvgLeisureTime', e.target.value)}
+              onFocus={() => setWeekendFocus(true)}
+              onBlur={() => setWeekendFocus(false)}
             />
           </div>
         </div>
@@ -246,8 +351,10 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
                 type="number"
                 min={0}
                 max={100}
-                value={form.restRecreationRate}
+                value={restRateFocus && form.restRecreationRate === 0 ? '' : form.restRecreationRate}
                 onChange={(e) => handleNumber('restRecreationRate', e.target.value)}
+                onFocus={() => setRestRateFocus(true)}
+                onBlur={() => setRestRateFocus(false)}
               />
             </div>
             <div>
@@ -257,8 +364,10 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
                 type="number"
                 min={0}
                 max={100}
-                value={form.hobbyRate}
+                value={hobbyRateFocus && form.hobbyRate === 0 ? '' : form.hobbyRate}
                 onChange={(e) => handleNumber('hobbyRate', e.target.value)}
+                onFocus={() => setHobbyRateFocus(true)}
+                onBlur={() => setHobbyRateFocus(false)}
               />
             </div>
             <div>
@@ -268,8 +377,10 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
                 type="number"
                 min={0}
                 max={100}
-                value={form.selfImprovementRate}
+                value={selfImproveRateFocus && form.selfImprovementRate === 0 ? '' : form.selfImprovementRate}
                 onChange={(e) => handleNumber('selfImprovementRate', e.target.value)}
+                onFocus={() => setSelfImproveRateFocus(true)}
+                onBlur={() => setSelfImproveRateFocus(false)}
               />
             </div>
             <div>
@@ -279,8 +390,10 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
                 type="number"
                 min={0}
                 max={100}
-                value={form.socialRelationshipRate}
+                value={socialRateFocus && form.socialRelationshipRate === 0 ? '' : form.socialRelationshipRate}
                 onChange={(e) => handleNumber('socialRelationshipRate', e.target.value)}
+                onFocus={() => setSocialRateFocus(true)}
+                onBlur={() => setSocialRateFocus(false)}
               />
             </div>
           </div>
@@ -292,9 +405,10 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
         <div>
           <label className="block text-sm mb-1">관심 여가활동의 1순위를 골라주세요</label>
           {renderTwoColumnButtons(
-            leisureActivityOptions,
+            leisureActivityOptions.filter((o) => o.value !== LeisureActivity.None),
             hasPickedActivity1 ? form.leisureActivity1 : null,
             (v) => {
+              if (v === LeisureActivity.None) return
               setHasPickedActivity1(true)
               handleSelect('leisureActivity1', v)
             }
@@ -376,7 +490,21 @@ export default function SurveyPage({ onSubmit, onBack }: Props) {
 
   return (
     <div className="p-4 max-w-md mx-auto text-left">
-      <h2 className="text-xl font-semibold mb-4">설문 입력</h2>
+      <h2 className="text-3xl font-semibold mb-3">설문 입력</h2>
+
+      {/* 진행 바 + 돌고래 마커 */}
+      <div className="mb-4 relative z-10">
+        <div className="relative">
+          <div ref={progressContainerRef} className="h-3 w-full rounded-full bg-gray-200 overflow-hidden">
+            <div ref={progressFillRef} className="h-full bg-sky-400" style={{ width: '0%' }} />
+          </div>
+          <div ref={progressDolphinRef} className="absolute -top-5 left-0 z-10 flex items-center justify-center" style={{ width: 24, height: 24 }}>
+            <img src={dol1} alt="dolphine-1" className="absolute w-6 h-6" />
+            <img src={dol2} alt="dolphine-2" className="absolute w-6 h-6" />
+          </div>
+        </div>
+        <div className="text-right text-xs text-gray-500 mt-1">{progressPercent}%</div>
+      </div>
 
       {stepContent}
 

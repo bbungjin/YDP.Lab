@@ -92,27 +92,27 @@ export const householdIncomeOptions: { value: HouseholdIncome; label: string }[]
 ]
 
 export const leisurePurposeOptions: { value: LeisurePurpose; label: string }[] = [
-  { value: LeisurePurpose.MindPeaceRest, label: '마음의 안정·휴식을 위해' },
+  { value: LeisurePurpose.MindPeaceRest, label: '마음의 안정/휴식을 위해' },
   { value: LeisurePurpose.KillTime, label: '남는 시간을 보내기 위해' },
-  { value: LeisurePurpose.FamilyFriends, label: '가족·지인 등과 시간을 보내기 위해' },
-  { value: LeisurePurpose.SelfSatisfaction, label: '자기만족·즐거움을 위해' },
+  { value: LeisurePurpose.FamilyFriends, label: '가족/지인 등과 시간을 보내기 위해' },
+  { value: LeisurePurpose.SelfSatisfaction, label: '자기만족/즐거움을 위해' },
   { value: LeisurePurpose.SelfDevelopment, label: '자기 계발을 위해' },
   { value: LeisurePurpose.StressRelief, label: '스트레스 해소를 위해' },
   { value: LeisurePurpose.HealthCare, label: '건강 관리를 위해' },
-  { value: LeisurePurpose.SocialRelationship, label: '대인 관계·교제를 위해' },
+  { value: LeisurePurpose.SocialRelationship, label: '대인 관계/교제를 위해' },
   { value: LeisurePurpose.Etc, label: '기타' },
 ]
 
 export const leisurePurpose2Options: { value: LeisurePurpose2; label: string }[] = [
   { value: LeisurePurpose2.None, label: '없음' },
-  { value: LeisurePurpose2.MindPeaceRest, label: '마음의 안정·휴식을 위해' },
+  { value: LeisurePurpose2.MindPeaceRest, label: '마음의 안정/휴식을 위해' },
   { value: LeisurePurpose2.KillTime, label: '남는 시간을 보내기 위해' },
-  { value: LeisurePurpose2.FamilyFriends, label: '가족·지인 등과 시간을 보내기 위해' },
-  { value: LeisurePurpose2.SelfSatisfaction, label: '자기만족·즐거움을 위해' },
+  { value: LeisurePurpose2.FamilyFriends, label: '가족/지인 등과 시간을 보내기 위해' },
+  { value: LeisurePurpose2.SelfSatisfaction, label: '자기만족/즐거움을 위해' },
   { value: LeisurePurpose2.SelfDevelopment, label: '자기 계발을 위해' },
   { value: LeisurePurpose2.StressRelief, label: '스트레스 해소를 위해' },
   { value: LeisurePurpose2.HealthCare, label: '건강 관리를 위해' },
-  { value: LeisurePurpose2.SocialRelationship, label: '대인 관계·교제를 위해' },
+  { value: LeisurePurpose2.SocialRelationship, label: '대인 관계/교제를 위해' },
   { value: LeisurePurpose2.Etc, label: '기타' },
 ]
 
