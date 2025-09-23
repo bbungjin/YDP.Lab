@@ -76,9 +76,17 @@ export default function StartPage({ onStart }: Props) {
       <button className="w-full py-3 rounded-md bg-black text-white dark:bg-white dark:text-black" onClick={onStart}>
         테스트 시작하기
       </button>
+      <button
+        className="mt-3 w-full py-3 rounded-md bg-yellow-400 text-black hover:bg-yellow-300 dark:bg-yellow-300 dark:text-black"
+        onClick={() => {
+          const url = 'https://qr.kakaopay.com/FTO1rHse9'
+          window.open(url, '_blank', 'noopener')
+        }}
+      >
+        💛 개발자 응원하기 (카카오 송금)
+      </button>
       <AnimatedText />
-      <img alt="logo" src={dol1} />
-      <img alt="logo" src={dol2} />
+      
     </div>
   )
 }
