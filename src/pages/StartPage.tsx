@@ -1,7 +1,5 @@
 import './pages.css'
 import AnimatedText from '../components/mainText'
-import dol1 from '../assets/dolphine-1.png'
-import dol2 from '../assets/dolphine-2.png'
 import gsap from 'gsap'
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import wavesSvg from '../assets/diagonal-waves.svg?raw'
