@@ -93,7 +93,7 @@ export default function FancyText() {
   return (
     <div
       ref={textRef}
-      className="text-5xl font-bold flex gap-1"
+      className="text-4xl font-bold flex gap-1"
     >
       {text.split("").map((char, i) => (
         <span key={i} className="inline-block">

@@ -77,9 +77,16 @@ export type ModelResponse = {
   animalType: string
   description: string
   animalDescription: string
+  animalTypeDescription?: string
   clusterDescription?: string
   interesting?: string[]
   animalImageUrl?: string
+  // 새 응답 필드
+  analSummary?:
+    | { bigTitle?: string; items?: { title: string; description: string }[] }
+    | { bigTitle?: string; [key: string]: any } // 서버가 객체 형태로 보낼 수 있음
+    | { title: string; description: string }[] // 배열 형태로도 올 수 있음
+  metrics?: { title: string; description: string }[]
   // analyze: ModelAnalyze
 }
 

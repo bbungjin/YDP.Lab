@@ -47,7 +47,10 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
         />
       )}
       <h2 className="text-2xl font-bold mb-1">{result.animalName}</h2>
-      <p className="text-gray-600 mb-4">{result.animalType}</p>
+      <p className="text-gray-600 mb-2">{result.animalType}</p>
+      {result.animalTypeDescription && (
+        <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{result.animalTypeDescription}</p>
+      )}
       <p className="mb-6">{result.animalDescription}</p>
 
       <div className="space-y-3">
@@ -56,21 +59,59 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
           <p className="text-sm text-gray-700 dark:text-gray-300">{result.description}</p>
         </section>
         <section>
-          <h3 className="font-semibold mb-1">분석 요약</h3>
-          {result.clusterDescription && (
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{result.clusterDescription}</p>
-          )}
-          {Array.isArray(result.interesting) && result.interesting.length > 0 && (
-            <div>
-              <h4 className="text-sm font-medium mb-1">흥미 요소</h4>
-              <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
-                {result.interesting.map((it, idx) => (
-                  <li key={idx}>{it}</li>
-                ))}
-              </ul>
+          <h3 className="font-semibold mb-1">{(typeof result.analSummary === 'object' && !Array.isArray(result.analSummary) && (result.analSummary as any).bigTitle) || '분석 요약'}</h3>
+          {/* 객체형 analSummary */}
+          {typeof result.analSummary === 'object' && !Array.isArray(result.analSummary) && (result.analSummary as any).items && (
+            <div className="space-y-2">
+              {(result.analSummary as any).items.map((it: any, idx: number) => (
+                <div key={idx}>
+                  <div className="text-sm font-medium">{it.title}</div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{it.description}</p>
+                </div>
+              ))}
             </div>
           )}
+          {/* 배열형 analSummary */}
+          {Array.isArray(result.analSummary) && (
+            <div className="space-y-2">
+              {result.analSummary.map((it, idx) => (
+                <div key={idx}>
+                  <div className="text-sm font-medium">{it.title}</div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{it.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
+          {/* 기존 설명도 보조로 유지 */}
+          {result.clusterDescription && (
+            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">{result.clusterDescription}</p>
+          )}
         </section>
+
+        {Array.isArray(result.metrics) && result.metrics.length > 0 && (
+          <section>
+            <h3 className="font-semibold mb-1">핵심 지표</h3>
+            <div className="space-y-2">
+              {result.metrics.map((m, idx) => (
+                <div key={idx}>
+                  <div className="text-sm font-medium">{m.title}</div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{m.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {Array.isArray(result.interesting) && result.interesting.length > 0 && (
+          <section>
+            <h3 className="font-semibold mb-1">흥미 요소</h3>
+            <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
+              {result.interesting.map((it, idx) => (
+                <li key={idx}>{it}</li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
 
       <div className="pt-6">
