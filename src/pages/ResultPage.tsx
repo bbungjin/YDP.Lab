@@ -1,5 +1,6 @@
 import './pages.css'
 import { type ModelResponse } from '../types'
+import { useMemo } from 'react'
 
 type Props = {
   result: ModelResponse | null
@@ -37,6 +38,29 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
 
   if (!result) return null
 
+  const analSummaryItems = useMemo(() => {
+    const asAny: any = (result as any).analSummary
+    if (!asAny) return []
+    if (Array.isArray(asAny)) {
+      return asAny.map((it: any) => ({ title: it.title || it.subtitle, description: it.description || it.content })).filter((x: any) => x.title || x.description)
+    }
+    if (typeof asAny === 'object' && Array.isArray(asAny.items)) {
+      return asAny.items.map((it: any) => ({ title: it.title || it.subtitle, description: it.description || it.content })).filter((x: any) => x.title || x.description)
+    }
+    return []
+  }, [result])
+
+  const analSummaryTitle = useMemo(() => {
+    const asAny: any = (result as any).analSummary
+    return (asAny && !Array.isArray(asAny) && asAny.bigTitle) || '분석 요약'
+  }, [result])
+
+  const metricItems = useMemo(() => {
+    const mAny: any = (result as any).metrics
+    if (!Array.isArray(mAny)) return []
+    return mAny.map((it: any) => ({ title: it.title || it.subtitle, description: it.description || it.content })).filter((x: any) => x.title || x.description)
+  }, [result])
+
   return (
     <div className="p-6 max-w-md mx-auto text-left">
       {result.animalImageUrl && (
@@ -59,25 +83,13 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
           <p className="text-sm text-gray-700 dark:text-gray-300">{result.description}</p>
         </section>
         <section>
-          <h3 className="font-semibold mb-1">{(typeof result.analSummary === 'object' && !Array.isArray(result.analSummary) && (result.analSummary as any).bigTitle) || '분석 요약'}</h3>
-          {/* 객체형 analSummary */}
-          {typeof result.analSummary === 'object' && !Array.isArray(result.analSummary) && (result.analSummary as any).items && (
+          <h3 className="font-semibold mb-1">{analSummaryTitle}</h3>
+          {analSummaryItems.length > 0 && (
             <div className="space-y-2">
-              {(result.analSummary as any).items.map((it: any, idx: number) => (
+              {analSummaryItems.map((it: { title?: string; description?: string }, idx: number) => (
                 <div key={idx}>
-                  <div className="text-sm font-medium">{it.title || it.subtitle}</div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">{it.description || it.content}</p>
-                </div>
-              ))}
-            </div>
-          )}
-          {/* 배열형 analSummary */}
-          {Array.isArray(result.analSummary) && (
-            <div className="space-y-2">
-              {result.analSummary.map((it, idx) => (
-                <div key={idx}>
-                  <div className="text-sm font-medium">{(it as any).title || (it as any).subtitle}</div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">{(it as any).description || (it as any).content}</p>
+                  <div className="text-sm font-medium">{it.title}</div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{it.description}</p>
                 </div>
               ))}
             </div>
@@ -88,14 +100,14 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
           )}
         </section>
 
-        {Array.isArray(result.metrics) && result.metrics.length > 0 && (
+        {metricItems.length > 0 && (
           <section>
             <h3 className="font-semibold mb-1">핵심 지표</h3>
             <div className="space-y-2">
-              {result.metrics.map((m, idx) => (
+              {metricItems.map((m: { title?: string; description?: string }, idx: number) => (
                 <div key={idx}>
-                  <div className="text-sm font-medium">{(m as any).title || (m as any).subtitle}</div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">{(m as any).description || (m as any).content}</p>
+                  <div className="text-sm font-medium">{m.title}</div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{m.description}</p>
                 </div>
               ))}
             </div>
