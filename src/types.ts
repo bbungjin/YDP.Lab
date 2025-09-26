@@ -78,15 +78,20 @@ export type ModelResponse = {
   description: string
   animalDescription: string
   animalTypeDescription?: string
+  // 서버에서 오타 혹은 다른 명칭으로 올 수 있는 필드들(방어적)
+  typeDescription?: string
+  typeDescriptoon?: string
   clusterDescription?: string
   interesting?: string[]
   animalImageUrl?: string
   // 새 응답 필드
   analSummary?:
-    | { bigTitle?: string; items?: { title: string; description: string }[] }
+    | { bigTitle?: string; items?: ({ title: string; description: string } | { subtitle: string; content: string })[] }
     | { bigTitle?: string; [key: string]: any } // 서버가 객체 형태로 보낼 수 있음
-    | { title: string; description: string }[] // 배열 형태로도 올 수 있음
-  metrics?: { title: string; description: string }[]
+    | ({ title: string; description: string } | { subtitle: string; content: string })[] // 배열 형태로도 올 수 있음
+  metrics?: ({ title: string; description: string } | { subtitle: string; content: string })[]
+  // 추가 부가 정보(철자 이슈 포함)
+  culsterInfo?: Array<Record<string, string>>
   // analyze: ModelAnalyze
 }
 

@@ -48,8 +48,8 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
       )}
       <h2 className="text-2xl font-bold mb-1">{result.animalName}</h2>
       <p className="text-gray-600 mb-2">{result.animalType}</p>
-      {result.animalTypeDescription && (
-        <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{result.animalTypeDescription}</p>
+      {(result.animalTypeDescription || result.typeDescription || (result as any).typeDescriptoon) && (
+        <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{result.animalTypeDescription || result.typeDescription || (result as any).typeDescriptoon}</p>
       )}
       <p className="mb-6">{result.animalDescription}</p>
 
@@ -65,8 +65,8 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
             <div className="space-y-2">
               {(result.analSummary as any).items.map((it: any, idx: number) => (
                 <div key={idx}>
-                  <div className="text-sm font-medium">{it.title}</div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">{it.description}</p>
+                  <div className="text-sm font-medium">{it.title || it.subtitle}</div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{it.description || it.content}</p>
                 </div>
               ))}
             </div>
@@ -76,8 +76,8 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
             <div className="space-y-2">
               {result.analSummary.map((it, idx) => (
                 <div key={idx}>
-                  <div className="text-sm font-medium">{it.title}</div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">{it.description}</p>
+                  <div className="text-sm font-medium">{(it as any).title || (it as any).subtitle}</div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{(it as any).description || (it as any).content}</p>
                 </div>
               ))}
             </div>
@@ -94,8 +94,8 @@ export default function ResultPage({ result, loading, error, onRetry, onRestart 
             <div className="space-y-2">
               {result.metrics.map((m, idx) => (
                 <div key={idx}>
-                  <div className="text-sm font-medium">{m.title}</div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">{m.description}</p>
+                  <div className="text-sm font-medium">{(m as any).title || (m as any).subtitle}</div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{(m as any).description || (m as any).content}</p>
                 </div>
               ))}
             </div>
